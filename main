@@ -1,0 +1,85 @@
+# This program uses linear regression to attempt to predict the
+# range of a car's Miles Per Gallon(MPG) based on its Performance 
+# and Reliability Ratings
+import pandas as pd
+from sklearn import linear_model
+from tkinter import *
+
+# --------- read columns from excel file, **REPLACE PATH!** ----------
+path = "C:\\Users\\vypng\\OneDrive\\Desktop\\python\\"
+cols = [17, 20, 24, 25]
+carsData = pd.read_excel(path + "cars_raw.xls", usecols = cols)
+
+
+# ------------- use linear model to predict range of MPG -------------
+def predict_minMPG():
+    X = carsData[['PerformanceRating', 'ReliabilityRating']]
+    Y_MinMPG = carsData['MinMPG']
+    regr = linear_model.LinearRegression()
+    regr.fit(X, Y_MinMPG)
+    predictedMinMPG = regr.predict([[performanceRating.get(), reliabilityRating.get()]])
+
+    # input validation
+    if (performanceRating.get() < 0.0 or reliabilityRating.get() < 0.0):
+        finalMinMPG.set(0.0)
+    elif (performanceRating.get() > 5.0 or reliabilityRating.get() > 5.0):
+        finalMinMPG.set(0.0)
+    else:
+        finalMinMPG.set(predictedMinMPG)
+
+def predict_maxMPG():
+    global predictedMaxMPG
+    X = carsData[['PerformanceRating', 'ReliabilityRating']]
+    Y_MaxMPG = carsData['MaxMPG']
+    regr = linear_model.LinearRegression()
+    regr.fit(X, Y_MaxMPG)
+    predictedMaxMPG = regr.predict([[performanceRating.get(), reliabilityRating.get()]])
+
+    # input validation
+    if (performanceRating.get() < 0.0 or reliabilityRating.get() < 0.0):
+        finalMaxMPG.set(0.0)
+    elif (performanceRating.get() > 5.0 or reliabilityRating.get() > 5.0):
+        finalMaxMPG.set(0.0)
+    else:
+        finalMaxMPG.set(predictedMaxMPG)
+
+
+# -------------------------- customizing gui -------------------------
+window = Tk()
+window['bg'] = '#BFD3D5'
+window.title("Predict A Car's Range of MPG!")
+window.geometry("400x350")
+
+title = Label(bg= '#BFD3D5', text = "Enter performance and reliability ratings (0.0-5.0):", font = 'Helvetica 11 bold')
+title.pack(pady = (30,0))
+
+performanceRating = DoubleVar()
+performanceRatingLabel = Label(bg= '#BFD3D5', text="Performance Rating:")
+performanceRatingEntry = Entry(textvariable=performanceRating)
+performanceRatingLabel.pack()
+performanceRatingEntry.pack(padx=3, pady=3)
+
+reliabilityRating = DoubleVar()
+reliabilityRatingLabel = Label(bg= '#BFD3D5', text="Reliability Rating:")
+reliabilityRatingEntry = Entry(textvariable=reliabilityRating)
+reliabilityRatingLabel.pack()
+reliabilityRatingEntry.pack(padx=3, pady=3)
+
+predictMPG = Button(master = window, height = 2, width = 20, text="Predict MPG!", command=lambda:[predict_minMPG(), predict_maxMPG()])
+predictMPG.pack(pady = (10,30))
+
+header1 = Label(bg= '#BFD3D5', text = "The minimum MPG is...", font = 'Helvetica 10 bold italic')
+header1.pack()
+finalMinMPG=DoubleVar()
+finalMinMPG.set(0.0)
+minMPG = Label(bg= '#BFD3D5', textvariable = finalMinMPG)
+minMPG.pack()
+
+header2 = Label(bg= '#BFD3D5', text = "The maximum MPG is...", font = 'Helvetica 10 bold italic')
+header2.pack()
+finalMaxMPG=DoubleVar()
+finalMaxMPG.set(0.0)
+maxMPG = Label(bg= '#BFD3D5', textvariable = finalMaxMPG)
+maxMPG.pack()
+
+window.mainloop()
