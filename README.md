@@ -7,7 +7,7 @@ My brother, a mechanical engineer who enjoys modifying cars, insisted that a car
 `pip install pandas` `pip install -U scikit-learn` `pip install tk`
 
 ## Results
-Not every test case I ran was accurate, but many of them were accurate. My solution was able to somewhat predict the range of MPG using some car listings's performance and reliability ratings.
+Not every test case I ran was accurate, but many of them were. My solution was somewhat able to predict the range of MPG using some car listings' performance and reliability ratings.
 
 ## Improvements
 1. I should have used matplotlib to first prove the hypothesis before attempting predictions.
